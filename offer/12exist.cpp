@@ -25,14 +25,44 @@ using namespace std;
 class Solution
 {
 private:
-    bool helper(vector<vector<char>> &board, vector<vector<int>> &vis, int x, int y, string &word, int i)
+    bool helper(vector<vector<char>> &board, vector<vector<bool>> &vis, int x, int y, string &word, int i)
     {
-        if(i==word.size())
-            
+        if (i == word.size())
+            return true;
+        vis[x][y] = true;
+        if (x > 0 && !vis[x - 1][y] && board[x - 1][y] == word[i] && helper(board, vis, x - 1, y, word, i + 1))
+            return true;
+        if (y > 0 && !vis[x][y - 1] && board[x][y - 1] == word[i] && helper(board, vis, x, y - 1, word, i + 1))
+            return true;
+        if (x < board.size() - 1 && !vis[x + 1][y] && board[x + 1][y] == word[i] && helper(board, vis, x + 1, y, word, i + 1))
+            return true;
+        if (y < board[0].size() - 1 && !vis[x][y + 1] && board[x][y + 1] == word[i] && helper(board, vis, x, y + 1, word, i + 1))
+            return true;
+        vis[x][y] = false;
+        return false;
     }
 
 public:
     bool exist(vector<vector<char>> &board, string word)
     {
+        int m = board.size();
+        if (m == 0 || word.empty())
+            return false;
+        int n = board[0].size();
+        vector<vector<bool>> vis(m, vector<bool>(n, false));
+        for (int i = 0; i < m; ++i)
+        {
+            for (int j = 0; j < n; ++j)
+            {
+                if (board[i][j] == word[0] && helper(board, vis, i, j, word, 1))
+                    return true;
+            }
+        }
+        return false;
     }
 };
+int main()
+{
+
+    return 0;
+}
